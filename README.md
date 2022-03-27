@@ -1,19 +1,79 @@
-# Adafruit PCA9685 PWM Servo Driver Library ![Build Status](https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library/workflows/Arduino%20Library%20CI/badge.svg)
+# Mod Adafruit PCA9685 PWM Servo Driver Library
 
+Esta es una librería modificada para controlar servos con el chip PCA9685
 
-This is a library for our Adafruit 16-channel PWM & Servo driver, shield or FeatherWing
+```C++
+PCA9685();
+PCA9685(const uint8_t addr);
+PCA9685(const uint8_t addr,TwoWire &i2c);
+```
 
-<a href="https://www.adafruit.com/products/815"><img src="https://cdn-shop.adafruit.com/970x728/815-04.jpg" height="300"/></a>
+### funciones principales
 
-Pick one up today in the adafruit shop!
-  * https://www.adafruit.com/products/815
-  * https://www.adafruit.com/product/1411
-  * https://www.adafruit.com/product/2928
+```C++
+void begin(uint16_t PWM_freq, double clk_freq, double A);
+//PWM_freq: Es la frecuencia del PWM en Hz, para servos se usa de 50hz a 333hz
+//clk_freq: Es la frecuencia del reloj en Hz, por defecto es 25Mhz
+//A: es un parámetro que se usa internamente, por defecto es 1.0
 
-These drivers use I2C to communicate, 2 pins are required to interface.
+=======================================================
 
-Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!
+//fija el largo de pulso de un servo en particular
+void writeMicroseconds(uint8_t num, uint16_t Microseconds);
+//num: es el número del canal en el chip PCA, va de 0 a 15
+//Microseconds: es el largo de pulso en us
 
-Written by Limor Fried/Ladyada  for Adafruit Industries. BSD license, check license.txt for more information. 
+=======================================================
 
-All text above must be included in any redistribution
+//fija el largo de pulso en us de todos los servos a la vez
+void writeAllMicroseconds(uint16_t Microseconds_array[16]);
+//Microseconds_array: es un array que lleva los valores de largo de pulso en us para todos los servos
+//Microseconds_array = {CH0,CH1,CH2....,CH14,CH15}
+
+=======================================================
+
+//fija el ángulo en grados de un servo particular
+void write(uint8_t num,float angle);
+//num: es el número del canal en el chip PCA, va de 0 a 15
+//angle: ángulo del servo, va desde 0 a 180
+
+=======================================================
+
+//fija los ángulos para todos los canales del PCA a la vez
+void writeALL(float angle_array[16]);
+//angle_array: es un array que lleva los valores de ángulo en grados para todos los servos
+//angle_array = {CH0,CH1,CH2....,CH14,CH15}
+
+=======================================================
+
+//configura los largos de pulso para su conversión desde un ángulo para un servo en particular
+void setconf(uint8_t num, uint16_t min_duty_us,uint16_t max_duty_us);
+//num: es el número del canal en el chip PCA, va de 0 a 15
+//min_duty_us: largo de pulso para que el servo está en 0 grados, por defecto es 500us
+//max_duty_us: largo de pulso para que el servo está en 180 grados, por defecto es 2500us
+
+=======================================================
+
+//configura los largos de pulso para su conversión desde un ángulo para todos los servos por igual
+void setAllconf(uint16_t min_duty_us,uint16_t max_duty_us);
+//min_duty_us: largo de pulso para que el servo está en 0 grados, por defecto es 500us
+//max_duty_us: largo de pulso para que el servo está en 180 grados, por defecto es 2500us
+```
+### funciones extra
+```C++
+    void reset(); 
+    void sleep();
+    void wakeup();
+    void enableExtClk(); //habilita la entrada de reloj externa
+    void setPWMFreq(double freq);
+    void setOutputMode(bool totempole);
+    void setPin(uint8_t num, uint16_t val, bool invert);
+    void setPrescale(uint8_t prescale);
+    uint8_t readPrescale(void);
+    double getOscillatorFrequency(void);
+    void setOscillatorFrequency(double freq, double A);
+    uint8_t getPWM(uint8_t num);
+    void setPWM(uint8_t num, uint16_t on, uint16_t off);
+    void setAllPWM(uint16_t PWM_array[16][2]);
+```
+
