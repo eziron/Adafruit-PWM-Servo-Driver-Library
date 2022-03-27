@@ -2,7 +2,7 @@
 # Classes, datatypes (KEYWORD1)
 #######################################
 
-Adafruit_PWMServoDriver	KEYWORD1
+PCA9685	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -12,14 +12,26 @@ begin	KEYWORD2
 reset	KEYWORD2
 sleep	KEYWORD2
 wakeup	KEYWORD2
-setExtClk	KEYWORD2
+enableExtClk	KEYWORD2
 setPWMFreq	KEYWORD2
 setOutputMode	KEYWORD2
+
 getPWM	KEYWORD2
 setPWM	KEYWORD2
+setAllPWM	KEYWORD2
+
+writeMicroseconds	KEYWORD2
+writeAllMicroseconds	KEYWORD2
+
+write	KEYWORD2
+writeALL	KEYWORD2
+
+setconf	KEYWORD2
+setAllconf	KEYWORD2
+
 setPin	KEYWORD2
 readPrescale	KEYWORD2
-writeMicroseconds	KEYWORD2
+
 setOscillatorFrequency	KEYWORD2
 getOscillatorFrequency	KEYWORD2
 

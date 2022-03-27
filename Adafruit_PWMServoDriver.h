@@ -1,5 +1,5 @@
 /*!
- *  @file Adafruit_PWMServoDriver.h
+ *  @file PCA9685.h
  *
  *  This is a library for our Adafruit 16-channel PWM & Servo driver.
  *
@@ -20,8 +20,8 @@
  *
  *  BSD license, all text above must be included in any redistribution
  */
-#ifndef _ADAFRUIT_PWMServoDriver_H
-#define _ADAFRUIT_PWMServoDriver_H
+#ifndef _PCA9685_H
+#define _PCA9685_H
 
 #include <Arduino.h>
 #include <Wire.h>
@@ -72,34 +72,59 @@
  *  @brief  Class that stores state and functions for interacting with PCA9685
  * PWM chip
  */
-class Adafruit_PWMServoDriver {
+class PCA9685 {
 public:
-  Adafruit_PWMServoDriver();
-  Adafruit_PWMServoDriver(const uint8_t addr);
-  Adafruit_PWMServoDriver(const uint8_t addr, TwoWire &i2c);
-  void begin(uint8_t prescale = 0);
+  PCA9685();
+  PCA9685(const uint8_t addr);
+  PCA9685(const uint8_t addr, TwoWire &i2c);
+  void begin(uint16_t PWM_freq = 0, double clk_freq=0,double A = 0);
   void reset();
   void sleep();
   void wakeup();
-  void setExtClk(uint8_t prescale);
-  void setPWMFreq(float freq);
+  void enableExtClk();
+  void setPWMFreq(double freq);
   void setOutputMode(bool totempole);
+  
+  
+  void setPin(uint8_t num, uint16_t val, bool invert = false);
+  void setPrescale(uint8_t prescale);
+  uint8_t readPrescale(void);
+  
+
+  void setOscillatorFrequency(double freq, double A=1.0);
+  double getOscillatorFrequency(void);
+
+  //fija los valores de PWM 
   uint8_t getPWM(uint8_t num);
   void setPWM(uint8_t num, uint16_t on, uint16_t off);
-  void setPin(uint8_t num, uint16_t val, bool invert = false);
-  uint8_t readPrescale(void);
+  void setAllPWM(uint16_t PWM_array[16][2]);
+
+  //fija los valores de PWM como largo de pulso en us
   void writeMicroseconds(uint8_t num, uint16_t Microseconds);
+  void writeAllMicroseconds(uint16_t Microseconds_array[16]);
 
-  void setOscillatorFrequency(uint32_t freq);
-  uint32_t getOscillatorFrequency(void);
+  //fija los valores de PWM como angulo
+  void write(uint8_t num,float angle);
+  void writeALL(float angle_array[16]);
 
+  //configura los largos de pulso para su convercion desde un angulo
+  void setconf(uint8_t num, uint16_t min_duty_us=500,uint16_t max_duty_us=2500);
+  void setAllconf(uint16_t min_duty_us=500,uint16_t max_duty_us=2500);
+  
 private:
   uint8_t _i2caddr;
   TwoWire *_i2c;
 
-  uint32_t _oscillator_freq;
+  double _oscillator_freq = 25000000.0;
+  double _A = 1.0;
+  uint8_t _prescale;
+
+  uint16_t angle_to_us_param[16][2];
   uint8_t read8(uint8_t addr);
   void write8(uint8_t addr, uint8_t d);
+
+  uint16_t us_to_count(uint16_t duty_us);
+  uint16_t angle_to_us(uint8_t num,float angle);
 };
 
 #endif

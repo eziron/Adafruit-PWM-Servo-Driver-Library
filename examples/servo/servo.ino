@@ -21,11 +21,11 @@
 #include <Adafruit_PWMServoDriver.h>
 
 // called this way, it uses the default address 0x40
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+PCA9685 pwm = PCA9685();
 // you can also call it with a different address you want
-//Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
+//PCA9685 pwm = PCA9685(0x41);
 // you can also call it with a different address and I2C interface
-//Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40, Wire);
+//PCA9685 pwm = PCA9685(0x40, Wire);
 
 // Depending on your servo make, the pulse width min and max may vary, you 
 // want these to be as small/large as possible without hitting the hard stop
@@ -63,24 +63,8 @@ void setup() {
    */
   pwm.setOscillatorFrequency(27000000);
   pwm.setPWMFreq(SERVO_FREQ);  // Analog servos run at ~50 Hz updates
-
+  pwm.setAllconf(USMIN,USMAX);
   delay(10);
-}
-
-// You can use this function if you'd like to set the pulse length in seconds
-// e.g. setServoPulse(0, 0.001) is a ~1 millisecond pulse width. It's not precise!
-void setServoPulse(uint8_t n, double pulse) {
-  double pulselength;
-  
-  pulselength = 1000000;   // 1,000,000 us per second
-  pulselength /= SERVO_FREQ;   // Analog servos run at ~60 Hz updates
-  Serial.print(pulselength); Serial.println(" us per period"); 
-  pulselength /= 4096;  // 12 bits of resolution
-  Serial.print(pulselength); Serial.println(" us per bit"); 
-  pulse *= 1000000;  // convert input seconds to us
-  pulse /= pulselength;
-  Serial.println(pulse);
-  pwm.setPWM(n, 0, pulse);
 }
 
 void loop() {
@@ -106,6 +90,22 @@ void loop() {
   delay(500);
   for (uint16_t microsec = USMAX; microsec > USMIN; microsec--) {
     pwm.writeMicroseconds(servonum, microsec);
+  }
+
+  delay(500);
+
+
+  //aquivalente a servo Sweep
+  int pos;
+  for (pos = 0; pos <= 180; pos += 1) {
+    pwm.write(servonum, pos);
+    delay(15);
+  }
+
+  delay(500);
+  for (pos = 0; pos <= 180; pos += 1) {
+    pwm.write(servonum, pos);
+    delay(15);
   }
 
   delay(500);
