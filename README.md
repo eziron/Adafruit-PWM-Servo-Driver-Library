@@ -2,6 +2,10 @@
 
 Esta es una librería modificada para controlar servos con el chip PCA9685
 
+La principal diferencia con la librería original es que incorpora funciones para actualizar los valores de los 16 canales del PCA9685 a la vez, estas funciones tienen un rendimiento mayor al de actualizar todos los canales de forma individual, ya que envía todos los valores en solo 1 transmisión de datos, de forma que el I2C no tiene que estar iniciando y terminando la transmisión por cada canal que se actualice
+
+Tambien cambie el nombre de la clase a PCA9685
+
 ```C++
 PCA9685();
 PCA9685(const uint8_t addr);
