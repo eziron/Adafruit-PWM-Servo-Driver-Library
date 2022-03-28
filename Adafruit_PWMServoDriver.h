@@ -77,7 +77,7 @@ public:
   PCA9685();
   PCA9685(const uint8_t addr);
   PCA9685(const uint8_t addr, TwoWire &i2c);
-  void begin(uint16_t PWM_freq = 0, double clk_freq=0,double A = 0);
+  void begin(uint16_t PWM_freq = 0, double clk_freq=0);
   void reset();
   void sleep();
   void wakeup();
@@ -91,7 +91,7 @@ public:
   uint8_t readPrescale(void);
   
 
-  void setOscillatorFrequency(double freq, double A=1.0);
+  void setOscillatorFrequency(double clk_freq);
   double getOscillatorFrequency(void);
 
   //fija los valores de PWM 
@@ -116,7 +116,6 @@ private:
   TwoWire *_i2c;
 
   double _oscillator_freq = 25000000.0;
-  double _A = 1.0;
   uint8_t _prescale;
 
   uint16_t angle_to_us_param[16][2];

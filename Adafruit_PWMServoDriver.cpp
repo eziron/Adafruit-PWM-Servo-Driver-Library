@@ -59,12 +59,12 @@ PCA9685::PCA9685(const uint8_t addr,TwoWire &i2c): _i2caddr(addr), _i2c(&i2c) {}
  *  @param  prescale
  *          Sets External Clock (Optional)
  */
-void PCA9685::begin(uint16_t PWM_freq, double clk_freq,double A) {
+void PCA9685::begin(uint16_t PWM_freq, double clk_freq) {
   _i2c->begin();
   reset();
 
   if (clk_freq>0) {
-    setOscillatorFrequency(clk_freq,A);
+    setOscillatorFrequency(clk_freq);
   } else {
     // set the default internal frequency
     setOscillatorFrequency(FREQUENCY_OSCILLATOR);
@@ -145,7 +145,7 @@ void PCA9685::setPWMFreq(double freq) {
   if (freq > 3500)
     freq = 3500; // Datasheet limit is 3052=50MHz/(4*4096)
 
-  double prescaleval = (_oscillator_freq / (freq * 4096.0)) - _A;
+  double prescaleval = (_oscillator_freq / (freq * 4096.0)) - 1;
   if (prescaleval < PCA9685_PRESCALE_MIN)
     prescaleval = PCA9685_PRESCALE_MIN;
   if (prescaleval > PCA9685_PRESCALE_MAX)
@@ -356,12 +356,8 @@ double PCA9685::getOscillatorFrequency(void) {
  * calculations
  *  @param freq The frequency the PCA9685 should use for frequency calculations
  */
-void PCA9685::setOscillatorFrequency(double freq, double A) {
+void PCA9685::setOscillatorFrequency(double freq) {
   _oscillator_freq = freq;
-
-  if(A > 0.0){
-    _A = A;
-  }
 }
 
 uint16_t PCA9685::us_to_count(uint16_t duty_us){

@@ -15,10 +15,9 @@ PCA9685(const uint8_t addr,TwoWire &i2c);
 ### funciones principales
 
 ```C++
-void begin(uint16_t PWM_freq, double clk_freq, double A);
+void begin(uint16_t PWM_freq, double clk_freq);
 //PWM_freq: Es la frecuencia del PWM en Hz, para servos se usa de 50hz a 333hz
 //clk_freq: Es la frecuencia del reloj en Hz, por defecto es 25Mhz
-//A: es un parámetro que se usa internamente, por defecto es 1.0
 
 =======================================================
 
@@ -75,7 +74,7 @@ void setAllconf(uint16_t min_duty_us,uint16_t max_duty_us);
     void setPrescale(uint8_t prescale);
     uint8_t readPrescale(void);
     double getOscillatorFrequency(void);
-    void setOscillatorFrequency(double freq, double A);
+    void setOscillatorFrequency(double freq);
     uint8_t getPWM(uint8_t num);
     void setPWM(uint8_t num, uint16_t on, uint16_t off);
     void setAllPWM(uint16_t PWM_array[16][2]);
